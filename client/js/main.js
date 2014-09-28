@@ -2,7 +2,7 @@ require.config({
   baseUrl:"jam/",
 });
 
-var DEBUG = true;
+var DEBUG = false;
 
 require(["jam", "../js/state", "../js/states/lobby"], function(jam, state, lobby){
   jam.config({dataDir:"data/"});
@@ -15,12 +15,11 @@ require(["jam", "../js/state", "../js/states/lobby"], function(jam, state, lobby
     serverEvents: {
       begin: jam.addPreload(),
       joinedRoom: function(arg){
-        console.log('?');
         if (arg.name === 'Lobby'){
           state(lobby);
         }
         else {
-          // Whateverrr
+          // Whateverrr.
         }
       }
     }
@@ -29,14 +28,12 @@ require(["jam", "../js/state", "../js/states/lobby"], function(jam, state, lobby
   cloak.run('http://localhost:8090');
 
   var init = function(){
-    // What do I even do here any more...
-    /** /
-    if (DEBUG === true){
-      state(mainstate);
+    if(window.location.pathname !== '/'){
+      cloak.message('joinRoom', window.location.pathname);
     } else {
-      state(titlestate);
+      // If no room.
+      cloak.message('joinLobby');
     }
-    /**/
   };
 
 

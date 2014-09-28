@@ -8,8 +8,12 @@ define(["jam", "../proto", "../state", "../states/mainstate"], function(jam, pro
     },
     serverEvents: {
       joinedRoom: function(arg){
-        console.log('joined' + arg.name);
-        state(mainstate);
+        if (arg.name === 'Lobby'){
+          console.log('Joined the Lobby twice?')
+        } else {
+          console.log('Joined ' + arg.name + '.');
+          state(mainstate);
+        }
       }
     }
   });

@@ -1,31 +1,33 @@
+var _ = require('lodash');
 var cloak = require('cloak');
+var express = require('express');
+var path = require('path');
 
-var sendLobbyCount = function(arg) {
-  this.messageMembers('userCount', this.getMembers().length);
+var room = require('./room');
+var lobby = require('./lobby');
+//var game = require('./game');
+//var nameGen = require('./util/name_generator');
+
+var app = express();
+app.use(express.static('./../client'));
+app.get('*', function (req, res) {
+  res.sendfile(path.normalize(__dirname + './../client/index.html'));
+});
+
+app.listen(8081);
+
+var conf = {
+  port: 8090,
+  autoJoinLobby: false,
+  reconnectWait: 3000
 };
 
-cloak.configure({
-  port: 8090,
+// Merge together the various configs.
+var confs = [room, lobby];
+for (c in confs){
+  _.merge(conf, confs[c].conf);
+}
 
-  /**/
-  roomLife: 1000*60*60*3,
-
-  autoJoinLobby: true,
-  minRoomMembers: 1,
-  pruneEmptyRooms: 1000,
-  reconnectWait: 3000,
-  /**/
-
-  messages: {
-    createRoom: function(arg, user) {
-      var room = cloak.createRoom(Math.floor(Math.random() * 1000));
-      var success = room.addMember(user);
-    },
-    lobby: {
-      newMember: sendLobbyCount,
-      memberLeaves: sendLobbyCount
-    }
-  }
-});
+cloak.configure(conf);
 
 cloak.run();

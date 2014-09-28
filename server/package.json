@@ -1,6 +1,8 @@
 {
   "name": "idk",
   "dependencies": {
-    "cloak": "^0.2.6"
+    "cloak": "^0.2.6",
+    "express": "^4.9.4",
+    "lodash": "^2.4.1"
   }
 }

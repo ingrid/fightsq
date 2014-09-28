@@ -1,22 +1,4 @@
 define(["jam", "../proto", "../state", "../states/mainstate"], function(jam, proto, state, mainstate) {
-  cloak.configure({
-    messages: {
-      lobbyInfo : function(arg) {
-        console.log('whatever');
-
-      }
-    },
-    serverEvents: {
-      joinedRoom: function(arg){
-        if (arg.name === 'Lobby'){
-          console.log('Joined the Lobby twice?')
-        } else {
-          console.log('Joined ' + arg.name + '.');
-          state(mainstate);
-        }
-      }
-    }
-  });
 
   var darkGreen = 'rgb(81, 157, 131)';
   var green = 'rgb(113,169,124)';
@@ -28,6 +10,26 @@ define(["jam", "../proto", "../state", "../states/mainstate"], function(jam, pro
   var p = [darkGreen, green, tan, cream, red];
 
   var lobby = function(gamestate){
+    console.log('lobbyadasdasdas');
+    cloak.configure({
+      messages: {
+        lobbyInfo : function(arg) {
+          console.log('whatever');
+
+        }
+      },
+      serverEvents: {
+        joinedRoom: function(arg){
+          if (arg.name === 'Lobby'){
+            console.log('Joined the Lobby twice?')
+          } else {
+            console.log('Joined ' + arg.name + '.');
+            state(mainstate);
+          }
+        }
+      }
+    });
+
     var g = gamestate.g;
 	var s = g.root.scene;
 

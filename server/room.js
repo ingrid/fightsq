@@ -10,10 +10,7 @@ exports.conf = {
   pruneEmptyRooms: 1000,
   messages: {
     joinRoom: function(id, user) {
-      var room = cloak.getRoom(id);
-      if (!room) {
-        room = cloak.createRoom(id);
-      }
+      var room = getRoomForUrl(id);
       var success = room.addMember(user);
       // Message others?
     },
@@ -29,7 +26,7 @@ exports.conf = {
   }
 };
 
-exports.getRoomForUrl = function(cloak, url) {
+var getRoomForUrl = function(url) {
   var roomName = url;
   var id = roomNameMap[roomName];
   var room = cloak.getRoom(id);
@@ -40,6 +37,8 @@ exports.getRoomForUrl = function(cloak, url) {
 
   return room;
 };
+
+exports.getRoomForUrl = getRoomForUrl;
 
 exports.cleanUpRoomOnClose = function() {
   delete roomNameMap[this.name];

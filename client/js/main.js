@@ -4,7 +4,7 @@ require.config({
 
 var DEBUG = false;
 
-require(["jam", "../js/state", "../js/states/lobby"], function(jam, state, lobby){
+require(["jam", "../js/state", "../js/states/lobby", "../js/states/mainstate"], function(jam, state, lobby, mainstate){
   jam.config({dataDir:"data/"});
 
   var g = state.g;
@@ -19,7 +19,9 @@ require(["jam", "../js/state", "../js/states/lobby"], function(jam, state, lobby
           state(lobby);
         }
         else {
-          // Whateverrr.
+          // Pass room data?
+          console.log('Joined ' + arg.name + '.');
+          state(mainstate);
         }
       }
     }
@@ -28,6 +30,7 @@ require(["jam", "../js/state", "../js/states/lobby"], function(jam, state, lobby
   cloak.run('http://localhost:8090');
 
   var init = function(){
+    console.log('Init! Done loading!');
     if(window.location.pathname !== '/'){
       cloak.message('joinRoom', window.location.pathname);
     } else {
@@ -38,7 +41,7 @@ require(["jam", "../js/state", "../js/states/lobby"], function(jam, state, lobby
 
 
   var preload = function() {
-    jam.preload("bunny.png");
+    //jam.preload("bunny.png");
 	jam.showPreloader(init);
   };
 

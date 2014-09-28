@@ -1,5 +1,6 @@
 define(["jam", "../proto", "../state", "../level", "../player"], function(jam, proto, state, level, player) {
   var mainstate = function(gamestate){
+    console.log('here!');
     cloak.configure({
       messages: {
         members: function(arg) {

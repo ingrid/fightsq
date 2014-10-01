@@ -24,25 +24,6 @@ exports.conf = {
       }
       user.message('members', members);
     }
-  },
-  room: {
-    init: function() {
-      this.data.tm = {};
-      this.data.mobs = {};
-      this.data.mid = 0;
-      setInterval(function() {
-        // Update mobs?
-      }, 500);
-    },
-    pulse: function(){
-      // I should test this out.
-    },
-    newMember: function(user) {
-    },
-    close: function() {
-    },
-//    shouldAllowuser: function(){
-//    }
   }
 };
 

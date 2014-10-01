@@ -49,13 +49,24 @@ define(["jam", "../proto", "../state", "../level", "../player", "../bunny"], fun
 
         // Mob stuff.
         spawned: function(mob) {
+          // Assuming a bunny for now, in future take the type explicitly.
+          var b = new bunny(mob.x, mob.y);
+          bunnies[mob.id] = b;
+          s.add(b);
         },
         updateMob: function(mob) {
-          var m = mobs[mob.id];
+          console.log('Update: ' + mob.id);
+          // Bunnies for now.
+          //var m = mobs[mob.id];
+          var m = bunnies[mob.id];
           // Lodash update?
-          m.x = mob.x;
-          m.y = mob.y;
-          m.currAnim = mob.currAnim;
+          if (m !== undefined) {
+            m.x = mob.x;
+            m.y = mob.y;
+            m.currAnim = mob.currAnim;
+          } else {
+            // Panic.
+          }
         }
       },
       serverEvents: {
@@ -120,7 +131,7 @@ define(["jam", "../proto", "../state", "../level", "../player", "../bunny"], fun
     });
 
 
-    s.add(new bunny(50, 50));
+    //s.add(new bunny(50, 50));
 
 	g.run();
   };

@@ -27,7 +27,7 @@ require(["jam", "../js/state", "../js/states/lobby", "../js/states/mainstate"], 
     }
   });
 
-  cloak.run('http://localhost:8090');
+  cloak.run('http://ec2-107-20-18-248.compute-1.amazonaws.com:8090');
 
   var init = function(){
     console.log('Init! Done loading!');
@@ -41,7 +41,7 @@ require(["jam", "../js/state", "../js/states/lobby", "../js/states/mainstate"], 
 
 
   var preload = function() {
-    //jam.preload("bunny.png");
+    jam.preload("bunny.png");
 	jam.showPreloader(init);
   };
 

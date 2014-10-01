@@ -1,15 +1,85 @@
-define(["jam", "../proto", "../state", "../level", "../player"], function(jam, proto, state, level, player) {
+define(["jam", "../proto", "../state", "../level", "../player", "../bunny"], function(jam, proto, state, level, player, bunny) {
   var mainstate = function(gamestate){
-    console.log('here!');
     cloak.configure({
       messages: {
-        members: function(arg) {
-          // Lists info for all current players in the room.
-          console.log('!!!!!!');
-          console.log(arg);
+        members: function(members) {
+          // Lists info for all current members in the room.
+          for (var p in members) {
+
+            var id = members[p].id;
+            if (id !== cloak.currentUser()) {
+              if (players[id] == undefined) {
+                players[id] = {
+                  name: members[p].name,
+                  position: null,
+                  frame: null,
+                  animation: null,
+                  obj: new player.remote(10, 10)
+                };
+                s.add(players[id].obj);
+              }
+            }
+          }
         },
-        moved: function(arg){
-          // Updates the position of one or more players
+
+        // Pertains to other player's actions.
+        moved: function(player) {
+          if (player.id !== cloak.currentUser()) {
+            var local_player = players[player.id];
+            if (local_player !== undefined) {
+              local_player.obj.x = player.x;
+              local_player.obj.y = player.y;
+            } else {
+              // Panic.
+            }
+          }
+        },
+        swung: function(player) {
+          var local_player = players[player.id];
+          if (player.id !== cloak.currentUser()) {
+            if (local_player !== undefined) {
+              var local_player = players[player.id];
+              local_player.obj.sword.swinging = true;
+            } else {
+              // Panic.
+              console.log("Unknown player swung.");
+            }
+          }
+        },
+
+        // Mob stuff.
+        spawned: function(mob) {
+        },
+        updateMob: function(mob) {
+          var m = mobs[mob.id];
+          // Lodash update?
+          m.x = mob.x;
+          m.y = mob.y;
+          m.currAnim = mob.currAnim;
+        }
+      },
+      serverEvents: {
+        roomMemberJoined: function(user) {
+          var id = user.id;
+          if (id !== cloak.currentUser()) {
+            if (players[id] == undefined) {
+              players[id] = {
+                name: user.name,
+                position: null,
+                frame: null,
+                animation: null,
+                obj: new player.remote(10, 10)
+              };
+              s.add(players[id].obj);
+            }
+          }
+        },
+        roomMemberLeft: function(user) {
+          var id = user.id;
+          if (players[id] !== undefined) {
+            s.remove(players[id].obj);
+            players[id] = undefined;
+          }
         }
       }
     });
@@ -20,6 +90,8 @@ define(["jam", "../proto", "../state", "../level", "../player"], function(jam, p
 
     // All OTHER players in the room.
     var players = {};
+
+    var bunnies = {};
 
     var p = [
       'rgb(155,170,106)',
@@ -32,7 +104,7 @@ define(["jam", "../proto", "../state", "../level", "../player"], function(jam, p
     g.bgColor = p[0];
 
     // Fix this shit.
-    var p = new player.prototype.local(20, 200);
+    var p = new player.local(20, 200);
     s.add(p);
 
     // What does a player object look like objectwise?
@@ -48,11 +120,7 @@ define(["jam", "../proto", "../state", "../level", "../player"], function(jam, p
     });
 
 
-    //var l = new level(g, p);
-
-    p.on("update", function(dt) {
-
-    });
+    s.add(new bunny(50, 50));
 
 	g.run();
   };

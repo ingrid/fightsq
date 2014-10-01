@@ -10,27 +10,34 @@ define(["jam", "./proto", "./util", "./level"], function(jam, proto, util, level
   ]
 
   var bunny = function(x, y){
-    // TODO: Maybe player can inherit from this.
 	jam.Sprite.call(this, x, y);
 
     this.squish = new jam.Sprite.Animation([1], 0, 0, 0, function(){
     });
-
     this.hop = new jam.Sprite.Animation([0], 0, 0, 0, function(){
     });
 
-    this.setSize(5);
+    var l = 5 * 2;
+
+    this.setImage("bunny.png", 17, 17);
+
+    this._renderOffsetX = -8;
+    this._renderOffsetY = -8;
+    this._collisionOffsetX = -8;
+    // TODO: What is this.
+    this._collisionOffsetY = -8 + 15;
+    this._collisionOffsetHeight = -16;
+    this.size = 5;
+    this.radius = 8;
+
     this.hopping = false;
-    this.hopDt = 0;
-    // Hop destination, not end destination.
-    // Destination direction?
     this.destination = {
       x: this.x,
       y: this.y
     }
     this.setImage("bunny.png", 17, 17);
     this.on("update", function(dt) {
-      if (this.hopping){
+      if (this.curAnim === 'hop'){
         this.playAnimation(this.hop);
         this.hopDt -= dt;
         if (this.hopDt <= 0){
@@ -60,37 +67,8 @@ define(["jam", "./proto", "./util", "./level"], function(jam, proto, util, level
 
   bunny.prototype = new jam.Sprite(0, 0);
 
-  bunny.prototype.determine_state = function(l){
-    // Is the player a threat?
-    //if (this.player
-    // Is there food nearby?
-
-    // Catch all.
-    this.state = 'wandering';
-  };
-
   bunny.prototype.hop = function(x, y){
 
-  };
-
-  bunny.prototype.setSize = function(size){
-    var c = colors[Math.floor(Math.random() * colors.length)];
-
-    var p_img = new proto.cir(size, c);
-    var l = size * 2;
-
-    //this.setImage(p_img.toDataURL(), l, l);
-    this.setImage("bunny.png", 17, 17);
-    //this._renderOffsetX = -size;
-    //this._renderOffsetY = -size;
-    this._renderOffsetX = -8;
-    this._renderOffsetY = -8;
-    this._collisionOffsetX = -8;
-    // TODO: What is this.
-    this._collisionOffsetY = -8 + 15;
-    this._collisionOffsetHeight = -16;
-    this.size = size;
-    this.radius = 8;
   };
 
   return bunny;

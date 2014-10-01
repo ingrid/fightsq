@@ -5,11 +5,11 @@ var path = require('path');
 
 var room = require('./room');
 var lobby = require('./lobby');
-//var game = require('./game');
-//var nameGen = require('./util/name_generator');
+var game = require('./game');
 
 var app = express();
-app.use(express.static('./../client'));
+app.use(express.static(path.normalize(__dirname +'./../client')));
+console.log(path.normalize(__dirname +'./../client'));
 app.get('*', function (req, res) {
   res.sendfile(path.normalize(__dirname + './../client/index.html'));
 });
@@ -23,7 +23,7 @@ var conf = {
 };
 
 // Merge together the various configs.
-var confs = [room, lobby];
+var confs = [room, lobby, game];
 for (c in confs){
   _.merge(conf, confs[c].conf);
 }

@@ -7,7 +7,8 @@ exports.conf = {
   roomLife: 1000*60*60*3,
   minRoomMembers: 1,
   maxRoomMembers: 4,
-  pruneEmptyRooms: 1000,
+  pruneEmptyRooms: 10,
+  reconnectWait: 100,
   messages: {
     joinRoom: function(id, user) {
       var room = getRoomForUrl(id);
@@ -23,6 +24,25 @@ exports.conf = {
       }
       user.message('members', members);
     }
+  },
+  room: {
+    init: function() {
+      this.data.tm = {};
+      this.data.mobs = {};
+      this.data.mid = 0;
+      setInterval(function() {
+        // Update mobs?
+      }, 500);
+    },
+    pulse: function(){
+      // I should test this out.
+    },
+    newMember: function(user) {
+    },
+    close: function() {
+    },
+//    shouldAllowuser: function(){
+//    }
   }
 };
 
